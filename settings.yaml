@@ -1,0 +1,6 @@
+systems:
+      - "hashicorp/precise32"
+      - "ubuntu/trusty64"
+      - "puphpet/centos65-x64"
+
+
