@@ -36,3 +36,8 @@ Then when you run `python vcluster.py`, you should be able to watch the tests ru
 ![](http://2014s.pennapps.com/build/images/logo/dark1.png)
 
 ![](https://mlh.io/brand-assets/logo-grayscale/mlh-logo-grayscale-small.png)
+
+
+## Sources 
+[vagrant-digitalocean](https://github.com/smdahlen/vagrant-digitalocean)
+[vagrant linode](https://github.com/displague/vagrant-linode)

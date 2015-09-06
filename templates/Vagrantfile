@@ -35,15 +35,15 @@ Vagrant.configure(2) do |config|
   end
 {% endif %}
 
-    config.vm.provision :puppet do |puppet|
-      puppet.manifests_path = "manifests"
-      puppet.manifest_file  = "base.pp"
-    end
+  config.vm.provision :puppet do |puppet|
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file  = "base.pp"
+  end
 
-    # Enable provisioning with a shell script. Additional provisioners such as
+  # Enable provisioning with whatever you want.
 
-    config.vm.provision "shell",
-    inline: "{{ load_command }}"
+  config.vm.provision "shell",
+  inline: "{{ load_command }}"
 
 
 
