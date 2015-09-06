@@ -4,9 +4,16 @@ import shutil
 import json
 import yaml
 import os
+import subprocess
 
+##
+# vcluster codebase
+# series of functions to manipulate the filesystem and vagrantfiles
+#
+#
 
 env = Environment(loader=FileSystemLoader('templates'))
+
 
 def open_configs():
     if os.path.isfile('settings.yaml'):
@@ -19,14 +26,29 @@ def open_configs():
         data = json.load(data_file)
         return data
 
+
+def test_command(command):
+    cmd = command.split(' ')
+    print "RUNNING COMMAND FOR " + str(command)
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    stdout = proc.communicate()[0]
+    myList = []
+    print stdout
+    return stdout
+
+
 def runProcess(exe):
     p = subprocess.Popen(exe, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    stdout = []
     while(True):
-      retcode = p.poll()  # returns None while subprocess is running
-      line = p.stdout.readline()
-      yield line
-      if(retcode is not None):
-        break
+        retcode = p.poll()  # returns None while subprocess is running
+        line = p.stdout.readline()
+        stdout.append(line)
+        print line
+        yield line
+        if(retcode is not None):
+            break
+    # return stdout
 
 
 def copy_rename(old_file_name, new_file_name):
@@ -39,10 +61,12 @@ def copy_rename(old_file_name, new_file_name):
         new_dst_file_name = os.path.join(dst_dir, new_file_name)
         os.rename(dst_file, new_dst_file_name)
 
-""" render the vagrant file template """
 
-# render jinja2 template with args
 def render_template(template_arg, **kwargs):
+    """
+    This function just uses kwargs to render the vagrantfile template
+    using the jinja2 templating engine
+    """
     template = env.get_template(template_arg)
     output_from_parsed_template = template.render(kwargs)
     return output_from_parsed_template
@@ -68,8 +92,6 @@ def get_filepaths(directory):
     return file_paths  # Self-explanatory.
 
 
-
-
 """ for each item in the config array create new vagrantfile , render the
 template, vagrant up in subprocess and capture stderror if it exists"""
 if __name__ == "__main__":
@@ -92,10 +114,7 @@ if __name__ == "__main__":
 
     # traverse directory creating VMs
     vms = get_filepaths('temp')
-    print vms
-    print "RUNNING VM's"
-    runProcess('pwd')
-    '''
+    i = 0
     for vFile in vms:
-        runProcess('cd ' + vFile + '; cat Vagrantfile')
-    '''
+        test_command('./run_vm.sh ' + str(i))
+        i += 1

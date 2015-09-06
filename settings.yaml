@@ -1,15 +1,18 @@
+# list of the vagrant images provided by hashicorp
 systems:
       - "hashicorp/precise32"
       - "ubuntu/trusty64"
       - "puphpet/centos65-x64"
 
-
+# unittest
 command: "python unittest.py"
 
+# digital ocean dict to use linode api
 digital_ocean:
-    id_rsa: 'digital_ocean id_rsa'
+    id_rsa: 'id_rsa'
     image: 'ubuntu-14-04-x64'
 
+# linode dict to use linode api
 linode:
-    id_rsa: 'linode id_rsa'
+    id_rsa: 'id_rsa'
     distro: 'Ubuntu 14.04 LTS'
