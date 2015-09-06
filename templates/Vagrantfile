@@ -1,17 +1,50 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+
 Vagrant.configure(2) do |config|
 
-  config.vm.box = {{ load_os }}
+{% if digital_ocean %}
+  config.vm.provider :digital_ocean do |provider, override|
+    # You must specify the override.ssh.private_key_path to
+    # enable authentication with the droplet
+    # override.ssh.private_key_path = '~/.ssh/id_rsa'
+    override.ssh.private_key_path = {{ digital_ocean['id_rsa'] }}
+    override.vm.box = 'digital_ocean'
+    override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
 
-  config.vm.provision :puppet do |puppet|
-    puppet.manifests_path = "manifests"
-    puppet.manifest_file  = "base.pp"
+    provider.token = digital_ocean['token']
+    provider.image = digital_ocean['image']
+    provider.region = 'nyc2'
+    provider.size = '512mb'
   end
 
-  # Enable provisioning with a shell script. Additional provisioners such as
-  
-  config.vm.provision "shell",
-  inline: "{{ command }}"
+{% elif linode %}
+  config.vm.provider :linode do |provider, override|
+    override.ssh.private_key_path = linode['id_rsa']
+    override.vm.box = 'linode'
+    override.vm.box_url = "https://github.com/displague/vagrant-linode/raw/master/box/linode.box"
+
+    provider.api_key = linode['API_KEY']
+    provider.distribution = linode['distro']
+    provider.datacenter = 'newark'
+    provider.plan = 'Linode 1024'
+  end
+
+{% else %}
+  config.vm.box = {{ load_os }}
+  end
+{% endif %}
+
+    config.vm.provision :puppet do |puppet|
+      puppet.manifests_path = "manifests"
+      puppet.manifest_file  = "base.pp"
+    end
+
+    # Enable provisioning with a shell script. Additional provisioners such as
+
+    config.vm.provision "shell",
+    inline: "{{ load_command }}"
+
+
 
 end

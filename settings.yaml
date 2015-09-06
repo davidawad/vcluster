@@ -4,4 +4,13 @@ systems:
       - "puphpet/centos65-x64"
 
 
-command: "cat /dev/random"
+command: "ls /dev/"
+
+digital_ocean:
+    id_rsa: 'digital_ocean id_rsa'
+    image: 'ubuntu-14-04-x64'
+
+
+linode:
+    id_rsa: 'linode id_rsa'
+    distro: 'Ubuntu 14.04 LTS'

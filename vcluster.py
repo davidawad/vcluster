@@ -55,6 +55,5 @@ if __name__ == "__main__":
         print render_template('Vagrantfile',
                                 load_os=system,
                                 load_command=load_command)
+        print '\n'
         # copy_rename('templates/Vagrantfile', 'templates/Vagrantfile')
-
-
