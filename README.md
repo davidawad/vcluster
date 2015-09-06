@@ -1,6 +1,10 @@
 # vcluster
 a CLI for generating vagrantfiles and running cross platform clustered unittests from the command line
 
+## Requirements
+- VirtualBox
+- Vagrant
+- Python 2.7
 
 ## How it works
 So the way this app works is you can open `settings.yaml` in order to create a list of all of the vagrant images you want to build for. 
@@ -20,6 +24,7 @@ command: "cat /dev/random"
 ```
 
 Then when you run `python vcluster.py`, you should be able to watch the tests run on the different VMs, if anything is logged to standard error the output will appear in red. 
+
 
 ## Built at PennApps XII
 
