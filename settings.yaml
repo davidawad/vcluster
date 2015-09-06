@@ -4,3 +4,4 @@ systems:
       - "puphpet/centos65-x64"
 
 
+command: "cat /dev/random"

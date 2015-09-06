@@ -2,24 +2,22 @@ import json
 import os
 import yaml
 from pprint import pprint
-from flask import render_template
+from flask import Flask, render_template
 import shutil
 
-# The purpose of this file is to load the yaml file in memory and pass it
-# around to other module around.
+app = Flask(__name__)
+
 
 def open_configs():
-    if os.path.isfile('settings.yml'):
-        config = yaml.load(open('settings.yml'))
+    if os.path.isfile('settings.yaml'):
+        config = yaml.load(open('settings.yaml'))
         return config
 
-    print 'No settings.yml found, reading settings.json'
+    print 'No settings.yaml found, reading settings.json'
 
     with open('settings.json') as data_file:
         data = json.load(data_file)
         return data
-
-
 
 def runProcess(exe):
     p = subprocess.Popen(exe, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -45,9 +43,17 @@ def copy_rename(old_file_name, new_file_name):
 """ for each item in the config array create new vagrantfile , render the template, vagrant up in subprocess and capture stderror if it exists"""
 
 """ render the vagrant file template """
-render_template('Vagrantfile', )
+# render_template('Vagrantfile', )
 
 if __name__ == "__main__":
     config = open_configs()
-    print 'hello'
+    i = 0
+    load_command = config['command']
+    for system in config['systems']:
+        print system
+        print render_template('Vagrantfile',
+                                load_os=system,
+                                load_command=load_command)
+        # copy_rename('templates/Vagrantfile', 'templates/Vagrantfile')
+
 
