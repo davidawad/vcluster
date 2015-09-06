@@ -2,10 +2,9 @@ import json
 import os
 import yaml
 from pprint import pprint
-from flask import Flask, render_template
 import shutil
-
-app = Flask(__name__)
+from jinja2 import Environment, FileSystemLoader
+env = Environment(loader=FileSystemLoader('templates'))
 
 
 def open_configs():
@@ -39,6 +38,10 @@ def copy_rename(old_file_name, new_file_name):
         new_dst_file_name = os.path.join(dst_dir, new_file_name)
         os.rename(dst_file, new_dst_file_name)
 
+def render_template(template_arg, **kwargs):
+    template = env.get_template(template_arg)
+    output_from_parsed_template = template.render(kwargs)
+    return output_from_parsed_template
 
 """ for each item in the config array create new vagrantfile , render the template, vagrant up in subprocess and capture stderror if it exists"""
 
