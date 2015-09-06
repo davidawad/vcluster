@@ -4,7 +4,7 @@ systems:
       - "puphpet/centos65-x64"
 
 
-command: "ls /dev/"
+command: "python unittest.py"
 
 digital_ocean:
     id_rsa: 'digital_ocean id_rsa'

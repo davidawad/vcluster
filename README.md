@@ -1,5 +1,5 @@
 # vcluster
-a CLI for generating vagrantfiles and running cross platform clustered unittests from the command line. 
+a CLI for generating vagrantfiles and running cross platform clustered unittests from the command line.
 
 You need to use something like Puppet as a provisioning service in order to make sure when you boot your other virtual machines that they are configured properly.
 
@@ -12,9 +12,9 @@ You can of course edit the `Vagrantfile` any way you see fit in order to make pr
 - Python 2.7
 
 ## How it works
-So the way this app works is you can open `settings.yaml` in order to create a list of all of the vagrant images you want to build for. 
+So the way this app works is you can open `settings.yaml` in order to create a list of all of the vagrant images you want to build for.
 
-Then you specify what shell command you want to run on the VM. 
+Then you specify what shell command you want to run on the VM.
 
 You should have a list that looks something like this.
 
@@ -28,7 +28,7 @@ systems:
 command: "cat /dev/random"
 ```
 
-Then when you run `python vcluster.py`, you should be able to watch the tests run on the different VMs, if anything is logged to standard error the output will appear in red. 
+Then when you run `python vcluster.py`, you should be able to watch the tests run on the different VMs, if anything is logged to standard error the output will appear in red.
 
 
 ## Built at PennApps XII
@@ -37,7 +37,7 @@ Then when you run `python vcluster.py`, you should be able to watch the tests ru
 
 ![](https://mlh.io/brand-assets/logo-grayscale/mlh-logo-grayscale-small.png)
 
-
-## Sources 
+## Sources
 [vagrant-digitalocean](https://github.com/smdahlen/vagrant-digitalocean)
+
 [vagrant linode](https://github.com/displague/vagrant-linode)
