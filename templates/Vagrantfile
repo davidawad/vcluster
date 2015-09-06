@@ -12,6 +12,6 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   
   config.vm.provision "shell",
-  inline: "{{ command  }}"
+  inline: "{{ command }}"
 
 end
