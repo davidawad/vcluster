@@ -1,9 +1,14 @@
 # vcluster
-a CLI for generating vagrantfiles and running cross platform clustered unittests from the command line
+a CLI for generating vagrantfiles and running cross platform clustered unittests from the command line. 
+
+You need to use something like Puppet as a provisioning service in order to make sure when you boot your other virtual machines that they are configured properly.
+
+You can of course edit the `Vagrantfile` any way you see fit in order to make provisioning happen correctly. I've included a basic sample.  
 
 ## Requirements
 - VirtualBox
 - Vagrant
+- Puppet
 - Python 2.7
 
 ## How it works

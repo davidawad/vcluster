@@ -38,16 +38,14 @@ def copy_rename(old_file_name, new_file_name):
         new_dst_file_name = os.path.join(dst_dir, new_file_name)
         os.rename(dst_file, new_dst_file_name)
 
+""" render the vagrant file template """
 def render_template(template_arg, **kwargs):
     template = env.get_template(template_arg)
     output_from_parsed_template = template.render(kwargs)
     return output_from_parsed_template
 
+
 """ for each item in the config array create new vagrantfile , render the template, vagrant up in subprocess and capture stderror if it exists"""
-
-""" render the vagrant file template """
-# render_template('Vagrantfile', )
-
 if __name__ == "__main__":
     config = open_configs()
     i = 0
