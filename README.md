@@ -1,4 +1,4 @@
-# vcluster ![Code Climate](https://d3s6mut3hikguw.cloudfront.net/github/DavidAwad/SpaceShare/badges/gpa.svg)
+# vcluster [![Code Climate](https://codeclimate.com/github/DavidAwad/vcluster/badges/gpa.svg)](https://codeclimate.com/github/DavidAwad/vcluster)
 
 a CLI for generating vagrantfiles and running cross platform clustered unittests from the command line.
 
