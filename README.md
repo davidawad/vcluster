@@ -1,4 +1,5 @@
-# vcluster
+# vcluster [![Code Climate](https://d3s6mut3hikguw.cloudfront.net/github/DavidAwad/SpaceShare/badges/gpa.svg)]
+
 a CLI for generating vagrantfiles and running cross platform clustered unittests from the command line.
 
 You need to use something like Puppet as a provisioning service in order to make sure when you boot your other virtual machines that they are configured properly.
@@ -25,7 +26,7 @@ systems:
       - "puphpet/centos65-x64"
 
 
-command: "cat /dev/random"
+command: "./unittest.sh"
 ```
 
 Then when you run `python vcluster.py`, you should be able to watch the tests run on the different VMs, if anything is logged to standard error the output will appear in red.

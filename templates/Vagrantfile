@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure(2) do |config|
-
+{#  Our custom Vagantfile template  #}
 {% if digital_ocean %}
   config.vm.provider :digital_ocean do |provider, override|
     # You must specify the override.ssh.private_key_path to
@@ -35,6 +35,9 @@ Vagrant.configure(2) do |config|
   end
 {% endif %}
 
+
+{#  TODO add support for custom puppet files / folders  #}
+
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "manifests"
     puppet.manifest_file  = "base.pp"
@@ -44,7 +47,5 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "shell",
   inline: "{{ load_command }}"
-
-
 
 end

@@ -14,8 +14,12 @@ import subprocess
 
 env = Environment(loader=FileSystemLoader('templates'))
 
-
+# TODO add functionality for taking config on command line
 def open_configs():
+    """
+    search for and open our config file.
+    accepts json or yaml
+    """
     if os.path.isfile('settings.yaml'):
         config = yaml.load(open('settings.yaml'))
         return config
@@ -28,6 +32,9 @@ def open_configs():
 
 
 def test_command(command):
+    """
+    The command
+    """
     cmd = command.split(' ')
     print "RUNNING COMMAND FOR " + str(command)
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
@@ -37,21 +44,12 @@ def test_command(command):
     return stdout
 
 
-def runProcess(exe):
-    p = subprocess.Popen(exe, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    stdout = []
-    while(True):
-        retcode = p.poll()  # returns None while subprocess is running
-        line = p.stdout.readline()
-        stdout.append(line)
-        print line
-        yield line
-        if(retcode is not None):
-            break
-    # return stdout
-
 
 def copy_rename(old_file_name, new_file_name):
+        """
+        create a copy of an old file and create a new
+        copy with the given name.
+        """
         src_dir = os.curdir
         dst_dir = os.path.join(os.curdir, "subfolder")
         src_file = os.path.join(src_dir, old_file_name)
@@ -92,11 +90,10 @@ def get_filepaths(directory):
     return file_paths  # Self-explanatory.
 
 
-""" for each item in the config array create new vagrantfile , render the
+""" for each item in the config array create a new vagrantfile , render the
 template, vagrant up in subprocess and capture stderror if it exists"""
 if __name__ == "__main__":
     config = open_configs()
-    runProcess('rm -rf temp')
     i = 0
     load_command = config['command']
     for system in config['systems']:
