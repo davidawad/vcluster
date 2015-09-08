@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure(2) do |config|
-{#  Our custom Vagantfile template  #}
+{#  Our custom Vagantfile Template  #}
 {% if digital_ocean %}
   config.vm.provider :digital_ocean do |provider, override|
     # You must specify the override.ssh.private_key_path to
@@ -32,7 +32,7 @@ Vagrant.configure(2) do |config|
 
 {% else %}
   config.vm.box = {{ load_os }}
-  end
+
 {% endif %}
 
 

@@ -12,4 +12,6 @@ cat Vagrantfile
 echo "creating VM..."
 
 echo "vagrant up"
+
+# currently commented for CLI dev
 # vagrant up

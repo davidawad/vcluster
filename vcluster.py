@@ -5,6 +5,7 @@ import json
 import yaml
 import os
 import subprocess
+import click
 
 ##
 # vcluster codebase
@@ -13,22 +14,6 @@ import subprocess
 #
 
 env = Environment(loader=FileSystemLoader('templates'))
-
-# TODO add functionality for taking config on command line
-def open_configs():
-    """
-    search for and open our config file.
-    accepts json or yaml
-    """
-    if os.path.isfile('settings.yaml'):
-        config = yaml.load(open('settings.yaml'))
-        return config
-
-    print 'No settings.yaml found, reading settings.json'
-
-    with open('settings.json') as data_file:
-        data = json.load(data_file)
-        return data
 
 
 def test_command(command):
@@ -42,7 +27,6 @@ def test_command(command):
     myList = []
     print stdout
     return stdout
-
 
 
 def copy_rename(old_file_name, new_file_name):
@@ -90,14 +74,29 @@ def get_filepaths(directory):
     return file_paths  # Self-explanatory.
 
 
-""" for each item in the config array create a new vagrantfile , render the
-template, vagrant up in subprocess and capture stderror if it exists"""
-if __name__ == "__main__":
-    config = open_configs()
+# TODO add functionality for taking config on command line
+def open_configs(filename):
+    """
+    search for and open our config file.
+    accepts json or yaml
+    """
+    if os.path.isfile(filename):
+        config = yaml.load(open(filename))
+        return config
+
+    print 'No settings.yaml found, reading settings.json'
+
+    with open(filename) as data_file:
+        data = json.load(data_file)
+        return data
+
+
+def generate_vagrant(config):
     i = 0
     load_command = config['command']
     for system in config['systems']:
-        # print system
+        """ for each item in the config array create a new vagrantfile , render the
+        template"""
         vagrantfile = render_template('Vagrantfile',
                                       load_os=system,
                                       load_command=load_command
@@ -108,10 +107,40 @@ if __name__ == "__main__":
         with open(curr_direc+"/Vagrantfile", "w") as text_file:
             text_file.write(vagrantfile)
         i += 1
+    """ Now done generating vagrant files, generate the subprocesses"""
+    spin_clusters()
 
-    # traverse directory creating VMs
+
+def spin_clusters():
+    """
+    vagrant up in a subprocess and capture output if it exists
+    """
     vms = get_filepaths('temp')
     i = 0
     for vFile in vms:
         test_command('./run_vm.sh ' + str(i))
         i += 1
+
+
+@click.command()
+@click.option('--config',
+              default='settings.yaml',
+              help='The name of your config file, supports YAML and JSON')
+def command_line(config):
+    """
+    search for and open our config file.
+    accepts json or yaml
+    """
+    if os.path.isfile(config):
+        config = yaml.load(open(config))
+        generate_vagrant(config)
+
+    # TODO better design for accepting json
+    '''
+    with open(config) as data_file:
+        data = json.load(data_file)
+        return data
+    '''
+
+if __name__ == "__main__":
+    configs = command_line()
