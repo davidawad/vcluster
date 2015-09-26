@@ -1,3 +1,9 @@
+##
+# vcluster codebase
+# series of functions to manipulate the filesystem and vagrantfiles
+# @author David Awad
+#
+
 from jinja2 import Environment, FileSystemLoader
 from pprint import pprint
 import shutil
@@ -7,13 +13,10 @@ import os
 import subprocess
 import click
 
-##
-# vcluster codebase
-# series of functions to manipulate the filesystem and vagrantfiles
-#
-#
 
 env = Environment(loader=FileSystemLoader('templates'))
+
+debug = False
 
 
 def test_command(command):
@@ -21,33 +24,18 @@ def test_command(command):
     The command
     """
     cmd = command.split(' ')
-    print "RUNNING COMMAND FOR " + str(command)
+    print("RUNNING COMMAND FOR " + str(command))
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     stdout = proc.communicate()[0]
     myList = []
-    print stdout
+    print(stdout)
     return stdout
-
-
-def copy_rename(old_file_name, new_file_name):
-        """
-        create a copy of an old file and create a new
-        copy with the given name.
-        """
-        src_dir = os.curdir
-        dst_dir = os.path.join(os.curdir, "subfolder")
-        src_file = os.path.join(src_dir, old_file_name)
-        shutil.copy(src_file, dst_dir)
-
-        dst_file = os.path.join(dst_dir, old_file_name)
-        new_dst_file_name = os.path.join(dst_dir, new_file_name)
-        os.rename(dst_file, new_dst_file_name)
 
 
 def render_template(template_arg, **kwargs):
     """
     This function just uses kwargs to render the vagrantfile template
-    using the jinja2 templating engine
+    using the jinja2 templating engine a la flask usage
     """
     template = env.get_template(template_arg)
     output_from_parsed_template = template.render(kwargs)
@@ -71,10 +59,9 @@ def get_filepaths(directory):
             filepath = os.path.join(root, filename)
             file_paths.append(filepath)  # Add it to the list.
 
-    return file_paths  # Self-explanatory.
+    return file_paths
 
 
-# TODO add functionality for taking config on command line
 def open_configs(filename):
     """
     search for and open our config file.
@@ -84,11 +71,8 @@ def open_configs(filename):
         config = yaml.load(open(filename))
         return config
 
-    print 'No settings.yaml found, reading settings.json'
-
-    with open(filename) as data_file:
-        data = json.load(data_file)
-        return data
+    print('No settings.yaml found')
+    return False
 
 
 def generate_vagrant(config):
@@ -99,7 +83,8 @@ def generate_vagrant(config):
         template"""
         vagrantfile = render_template('Vagrantfile',
                                       load_os=system,
-                                      load_command=load_command
+                                      load_command=load_command,
+                                      config=config
                                       )
         # print vagrantfile
         curr_direc = 'temp/vm_'+str(i)
@@ -118,7 +103,10 @@ def spin_clusters():
     vms = get_filepaths('temp')
     i = 0
     for vFile in vms:
-        test_command('./run_vm.sh ' + str(i))
+        if debug:
+            test_command('./run_vm.sh '+str(i)+" debug")
+        else:  # not in debugging mode
+            test_command('./run_vm.sh '+str(i))
         i += 1
 
 
@@ -131,16 +119,15 @@ def command_line(config):
     search for and open our config file.
     accepts json or yaml
     """
+    print("WARNING: This kind of unit testing should only be on beefy machines, otherwise vagrant may eat your shorts...")
     if os.path.isfile(config):
         config = yaml.load(open(config))
+        if config['debug']:
+            print('WARNING: Debugging enabled, no virtual machines will be created')
+            global debug
+            debug = True
         generate_vagrant(config)
 
-    # TODO better design for accepting json
-    '''
-    with open(config) as data_file:
-        data = json.load(data_file)
-        return data
-    '''
 
 if __name__ == "__main__":
     configs = command_line()

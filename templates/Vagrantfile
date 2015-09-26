@@ -12,9 +12,9 @@ Vagrant.configure(2) do |config|
     override.vm.box = 'digital_ocean'
     override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
 
-    provider.token = digital_ocean['token']
-    provider.image = digital_ocean['image']
-    provider.region = 'nyc2'
+    provider.token = {{ digital_ocean['token'] }}
+    provider.image = {{ digital_ocean['image'] }}
+    provider.region = 'nyc3'
     provider.size = '512mb'
   end
 
@@ -36,11 +36,9 @@ Vagrant.configure(2) do |config|
 {% endif %}
 
 
-{#  TODO add support for custom puppet files / folders  #}
-
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "manifests"
-    puppet.manifest_file  = "base.pp"
+    puppet.manifest_file = {{ config['puppet'] }}
   end
 
   # Enable provisioning with whatever you want.

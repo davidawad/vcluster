@@ -4,8 +4,10 @@ systems:
       - "ubuntu/trusty64"
       - "puphpet/centos65-x64"
 
-# unittest
+# run any shell command when the VM boots
 command: "python unittest.py"
+
+puppet : 'init.pp'
 
 # digital ocean dict to use linode api
 digital_ocean:
@@ -16,3 +18,5 @@ digital_ocean:
 linode:
     id_rsa: 'id_rsa'
     distro: 'Ubuntu 14.04 LTS'
+
+debug: True

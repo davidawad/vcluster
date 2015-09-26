@@ -6,12 +6,16 @@ cd temp/vm_$1
 
 echo "--------------------"
 
-cat Vagrantfile
-
 # WARNING unittest on beefy machines
 echo "creating VM..."
 
-echo "vagrant up"
-
 # currently commented for CLI dev
 # vagrant up
+
+if [ $2 == "debug" ]
+    then
+    echo "DEBUGGING IN SCRIPT! \n"
+    cat Vagrantfile
+else
+    echo "vagrant up for vm $1" +
+fi
