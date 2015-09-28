@@ -24,8 +24,8 @@ Vagrant.configure(2) do |config|
     override.vm.box = 'linode'
     override.vm.box_url = "https://github.com/displague/vagrant-linode/raw/master/box/linode.box"
 
-    provider.api_key = linode['API_KEY']
-    provider.distribution = linode['distro']
+    provider.api_key = {{ linode['API_KEY'] }}
+    provider.distribution = {{ linode['distro'] }}
     provider.datacenter = 'newark'
     provider.plan = 'Linode 1024'
   end
