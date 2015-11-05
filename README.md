@@ -38,7 +38,7 @@ Then when you run `python vcluster.py`, you should be able to watch the tests ru
 
 ![](https://mlh.io/brand-assets/logo-grayscale/mlh-logo-grayscale-small.png)
 
-## Sources
+## Plugins vcluster uses
 [vagrant-digitalocean](https://github.com/smdahlen/vagrant-digitalocean)
 
 [vagrant linode](https://github.com/displague/vagrant-linode)
