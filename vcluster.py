@@ -75,8 +75,7 @@ def open_configs(filename):
     return False
 
 
-def generate_vagrant(config):
-    i = 0
+def generate_vagrantfiles(config):
     load_command = config['command']
     for system in config['systems']:
         """ for each item in the config array create a new vagrantfile,
@@ -86,12 +85,11 @@ def generate_vagrant(config):
                                       load_command=load_command,
                                       config=config
                                       )
-        # print vagrantfile
-        curr_direc = 'temp/vm_' + str(i)
+
+        curr_direc = 'cluster/vm_' + system
         os.makedirs(curr_direc)
         with open(curr_direc+"/Vagrantfile", "w") as text_file:
             text_file.write(vagrantfile)
-        i += 1
     """ Now done generating vagrant files, generate the subprocesses"""
     spin_clusters()
 
@@ -100,12 +98,19 @@ def spin_clusters():
     """
     vagrant up in a subprocess and capture output if it exists
     """
-    vms = get_filepaths('temp')
-    i = 0
+    # FIXME get all folder names in a given directory
+    files = get_filepaths('temp')
+    # TODO use PDB to find this structure
     for vFile in vms:
         run_command('./run_vm.sh '+str(i))
-        i += 1
 
+
+
+def clear_vms():
+    '''
+    hollow function that will clear out VM folders where tests were successful
+    '''
+    return
 
 @click.command()
 @click.option('--config',
@@ -124,7 +129,7 @@ def command_line(config):
             print('WARNING: Debugging enabled, no virtual machines will be created')
             global debug
             debug = True
-        generate_vagrant(config)
+        generate_vagrantfiles(config)
 
 
 if __name__ == "__main__":
