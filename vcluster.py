@@ -19,7 +19,7 @@ env = Environment(loader=FileSystemLoader('templates'))
 debug = False
 
 
-def test_command(command):
+def run_command(command):
     """
     The command
     """
@@ -79,15 +79,15 @@ def generate_vagrant(config):
     i = 0
     load_command = config['command']
     for system in config['systems']:
-        """ for each item in the config array create a new vagrantfile , render the
-        template"""
+        """ for each item in the config array create a new vagrantfile,
+        render the template"""
         vagrantfile = render_template('Vagrantfile',
                                       load_os=system,
                                       load_command=load_command,
                                       config=config
                                       )
         # print vagrantfile
-        curr_direc = 'temp/vm_'+str(i)
+        curr_direc = 'temp/vm_' + str(i)
         os.makedirs(curr_direc)
         with open(curr_direc+"/Vagrantfile", "w") as text_file:
             text_file.write(vagrantfile)
@@ -103,10 +103,7 @@ def spin_clusters():
     vms = get_filepaths('temp')
     i = 0
     for vFile in vms:
-        if debug:
-            test_command('./run_vm.sh '+str(i)+" debug")
-        else:  # not in debugging mode
-            test_command('./run_vm.sh '+str(i))
+        run_command('./run_vm.sh '+str(i))
         i += 1
 
 
@@ -119,7 +116,8 @@ def command_line(config):
     search for and open our config file.
     accepts json or yaml
     """
-    print("WARNING: This kind of unit testing should only be on beefy machines, otherwise vagrant may eat your shorts...")
+    print('''WARNING: This kind of unit testing should only be on beefy machines,
+     otherwise vagrant may eat your shorts...''')
     if os.path.isfile(config):
         config = yaml.load(open(config))
         if config['debug']:
