@@ -7,16 +7,18 @@ systems:
 # run any shell command when the VM boots
 command: "python unittest.py"
 
+# Example puppet files to pass to your Virtual Machines
 puppet : 'init.pp'
 
-# digital ocean dict to use linode api
+# digital ocean sample usage
 digital_ocean:
     id_rsa: 'id_rsa'
     image: 'ubuntu-14-04-x64'
 
-# linode dict to use linode api
+# linode sample usage
 linode:
     id_rsa: 'id_rsa'
     distro: 'Ubuntu 14.04 LTS'
 
+# Debug Flag
 debug: True
