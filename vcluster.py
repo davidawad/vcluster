@@ -21,7 +21,7 @@ debug = False
 
 def run_command(command):
     """
-    The command
+    Runs command on the shell in a subprocess.
     """
     cmd = command.split(' ')
     print("RUNNING COMMAND FOR " + str(command))

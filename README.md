@@ -1,6 +1,6 @@
 # vcluster [![Code Climate](https://codeclimate.com/github/DavidAwad/vcluster/badges/gpa.svg)](https://codeclimate.com/github/DavidAwad/vcluster)
 
-a CLI for generating vagrantfiles and running cross platform clustered unittests from the command line.
+a CLI for generating Vagrant files and running cross platform clustered unit tests from the command line.
 
 You need to use something like Puppet as a provisioning service in order to make sure when you boot your other virtual machines that they are configured properly.
 
@@ -10,7 +10,7 @@ You can of course edit the `Vagrantfile` any way you see fit in order to make pr
 - VirtualBox
 - Vagrant
 - Puppet
-- Python 2.7
+- Python 2.7+
 
 ## How it works
 So the way this app works is you can open `settings.yaml` in order to create a list of all of the vagrant images you want to build for.
