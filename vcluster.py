@@ -105,12 +105,12 @@ def spin_clusters():
         run_command('./run_vm.sh '+str(i))
 
 
-
 def clear_vms():
     '''
     hollow function that will clear out VM folders where tests were successful
     '''
     return
+
 
 @click.command()
 @click.option('--config',
