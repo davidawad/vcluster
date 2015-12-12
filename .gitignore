@@ -2,6 +2,7 @@ ven
 venv
 temp
 .DS_Store
+temp_cluster
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
