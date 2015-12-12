@@ -18,18 +18,24 @@ env = Environment(loader=FileSystemLoader('templates'))
 
 debug = False
 
+vm_list = []
 
-def run_command(command):
+
+def open_configs(filename):
     """
-    Runs command on the shell in a subprocess.
+    search for and open our config file.
+    accepts json or yaml
     """
-    cmd = command.split(' ')
-    print("RUNNING COMMAND FOR " + str(command))
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    stdout = proc.communicate()[0]
-    myList = []
-    print(stdout)
-    return stdout
+    if os.path.isfile(filename):
+        config = yaml.load(open(filename))
+        return config
+
+    print('No settings.yaml found')
+    return False
+
+
+def print_stderr(out):
+    print ("\033[91m {}\033[00m".format(name))
 
 
 def render_template(template_arg, **kwargs):
@@ -62,19 +68,6 @@ def get_filepaths(directory):
     return file_paths
 
 
-def open_configs(filename):
-    """
-    search for and open our config file.
-    accepts json or yaml
-    """
-    if os.path.isfile(filename):
-        config = yaml.load(open(filename))
-        return config
-
-    print('No settings.yaml found')
-    return False
-
-
 def generate_vagrantfiles(config):
     load_command = config['command']
     for system in config['systems']:
@@ -85,9 +78,10 @@ def generate_vagrantfiles(config):
                                       load_command=load_command,
                                       config=config
                                       )
+        temp = vm
 
-        curr_direc = 'cluster/vm_' + system
-        os.makedirs(curr_direc)
+        curr_direc = 'temp_cluster/vm_' + system
+        os.makedirs(curr_direc)  # ex: cluster/vm_trusty64
         with open(curr_direc+"/Vagrantfile", "w") as text_file:
             text_file.write(vagrantfile)
     """ Now done generating vagrant files, generate the subprocesses"""
@@ -98,11 +92,11 @@ def spin_clusters():
     """
     vagrant up in a subprocess and capture output if it exists
     """
-    # FIXME get all folder names in a given directory
-    files = get_filepaths('temp')
-    # TODO use PDB to find this structure
-    for vFile in vms:
-        run_command('./run_vm.sh '+str(i))
+    for vm in vm_list:
+        vm.boot()
+        if vm.stderr:
+            print('Virtual Machine {0} logged to stder:', vm.os)
+            print_stderr(vm.stderr)
 
 
 def clear_vms():
@@ -132,5 +126,6 @@ def command_line(config):
         generate_vagrantfiles(config)
 
 
+# start CLI input function using click module
 if __name__ == "__main__":
     configs = command_line()
