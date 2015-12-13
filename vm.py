@@ -5,12 +5,30 @@
 # @author David Awad
 #
 
+import subprocess
+
 
 class vm:
-
-    __init__(self, os):
-        # OS of the virtual machine
+    '''
+    Class to represent a virtual machine and associated information
+    '''
+    def __init__(self, os, path, vagrantfile='', debug=True):
         self.os = os
-        self.vagrantfile = ''
-        self.stdout = ''
-        self.stderr = ''
+        self.path = ''
+        self.vagrantfile = vagrantfile
+        self.debug = debug
+        self.stdout = None
+        self.stderr = None
+
+    def boot(self):  # FIXME move this around a bit?
+        if self.debug:
+            print("DEBUG: Vagrant up")
+            return
+        else:
+            proc = subprocess.Popen(['vagrant', 'up'],
+                                    cwd=self.path
+                                    stdout=subprocess.PIPE
+                                    stderr=subprocess.STDOUT)
+            # TODO get stderr
+            stdout = proc.communicate()[0]
+        return
