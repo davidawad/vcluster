@@ -2,9 +2,9 @@ all: run
 
 
 run:
-	rm -rf temp
+	rm -rf temp_cluster
 	python vcluster.py
-	ls temp
+	ls temp_cluster
 
 clear:
 	rm *.pyc

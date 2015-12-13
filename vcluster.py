@@ -5,18 +5,20 @@
 #
 
 from jinja2 import Environment, FileSystemLoader
-from pprint import pprint
+from virtual_machine import vm
+import subprocess
 import shutil
+import click
 import json
 import yaml
 import os
-import subprocess
-import click
+
 
 
 env = Environment(loader=FileSystemLoader('templates'))
 
 debug = False
+
 
 def open_config(config):
     """
@@ -26,7 +28,7 @@ def open_config(config):
     if os.path.isfile(config):
         config = yaml.load(open(config))
         if config['debug']:
-            print('WARNING: Debugging enabled, no virtual machines will be created')
+            print_stderr('Debugging enabled, no virtual machines will be created')
             global debug
             debug = True
         return config
@@ -36,7 +38,7 @@ def open_config(config):
 
 
 def print_stderr(out):
-    print ("\033[91m {}\033[00m".format(name))
+    print ("\033[91m {}\033[00m".format(out))
 
 
 def render_template(template_arg, **kwargs):
@@ -82,18 +84,17 @@ def generate_machines(config):
                                            load_command=load_command,
                                            config=config)
 
-        temp_path = 'temp_cluster/'+system
-        os.makedirs(temp_direc)  # ex: cluster/vm_trusty64
-        with open(curr_direc+"/Vagrantfile", "w") as text_file:
-            text_file.write(vagrantfile)
-
+        temp_path = 'temp_cluster/'+system.replace('/', '-')
+        os.makedirs(temp_path)  # ex: cluster/vm_trusty64
+        with open(temp_path+"/Vagrantfile", "w") as f:
+            f.write(temp_vagrantfile)
         # create the new vm object
         temp_vm = vm(system, temp_path, temp_vagrantfile)
         vm_list.append(temp_vm)
     return vm_list
 
 
-def spin_clusters(vm_lsit):
+def spin_clusters(vm_list):
     """
     input: Takes in a list of vm Objects
     output: returns
@@ -110,9 +111,9 @@ def spin_clusters(vm_lsit):
 
 def clear_vms():
     """
-    hollow function that will clear out VM folders
+    clear out VM folders
     """
-
+    proc = subprocess.Popen(['rm', '-rf', 'temp_cluster'])
     return
 
 
@@ -122,9 +123,9 @@ def clear_vms():
               help='The name of your config file, supports YAML and JSON')
 def command_line(config):
     """ main thread """
-    print('''WARNING: This kind of unit testing should only be on beefy machines,
+    print_stderr('''WARNING: This kind of unit testing should only be on beefy machines,
      otherwise vagrant may eat your shorts...''')
-     # open config file
+    # open config file
     config = open_config(config)
     if not config:
         print("config file doesn't exist?")
@@ -133,8 +134,7 @@ def command_line(config):
     # Now spin clusters
     spin_clusters(vm_list)
 
-    clear_vms()
-
+    # clear_vms()
 
 
 # start CLI input function using click module

@@ -8,7 +8,7 @@
 import subprocess
 
 
-class vm:
+class vm(object):
     '''
     Class to represent a virtual machine and associated information
     '''
@@ -26,8 +26,8 @@ class vm:
             return
         else:
             proc = subprocess.Popen(['vagrant', 'up'],
-                                    cwd=self.path
-                                    stdout=subprocess.PIPE
+                                    cwd=self.path,
+                                    stdout=subprocess.PIPE,
                                     stderr=subprocess.STDOUT)
             # TODO get stderr
             stdout = proc.communicate()[0]
