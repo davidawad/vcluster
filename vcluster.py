@@ -18,20 +18,21 @@ env = Environment(loader=FileSystemLoader('templates'))
 
 debug = False
 
-vm_list = []
-
-
-def open_configs(filename):
+def open_config(config):
     """
     search for and open our config file.
     accepts json or yaml
     """
-    if os.path.isfile(filename):
-        config = yaml.load(open(filename))
+    if os.path.isfile(config):
+        config = yaml.load(open(config))
+        if config['debug']:
+            print('WARNING: Debugging enabled, no virtual machines will be created')
+            global debug
+            debug = True
         return config
-
-    print('No settings.yaml found')
-    return False
+    else:
+        print('No settings.yaml found')
+        return False
 
 
 def print_stderr(out):
@@ -68,29 +69,37 @@ def get_filepaths(directory):
     return file_paths
 
 
-def generate_vagrantfiles(config):
+def generate_machines(config):
+    """
+    creates a vm object for each of the operating systems spefied in the
+    config file, and adds it to the global list
+    """
     load_command = config['command']
+    vm_list = []
     for system in config['systems']:
-        """ for each item in the config array create a new vagrantfile,
-        render the template"""
-        vagrantfile = render_template('Vagrantfile',
-                                      load_os=system,
-                                      load_command=load_command,
-                                      config=config
-                                      )
-        temp = vm
+        temp_vagrantfile = render_template('Vagrantfile',
+                                           load_os=system,
+                                           load_command=load_command,
+                                           config=config)
 
-        curr_direc = 'temp_cluster/vm_' + system
-        os.makedirs(curr_direc)  # ex: cluster/vm_trusty64
+        temp_path = 'temp_cluster/'+system
+        os.makedirs(temp_direc)  # ex: cluster/vm_trusty64
         with open(curr_direc+"/Vagrantfile", "w") as text_file:
             text_file.write(vagrantfile)
-    """ Now done generating vagrant files, generate the subprocesses"""
-    spin_clusters()
+
+        # create the new vm object
+        temp_vm = vm(system, temp_path, temp_vagrantfile)
+        vm_list.append(temp_vm)
+    return vm_list
 
 
-def spin_clusters():
+def spin_clusters(vm_lsit):
     """
-    vagrant up in a subprocess and capture output if it exists
+    input: Takes in a list of vm Objects
+    output: returns
+
+    Iterates through a list of vm objects and performs a vagrant up in a
+    subprocess and captures output if it exists
     """
     for vm in vm_list:
         vm.boot()
@@ -100,9 +109,10 @@ def spin_clusters():
 
 
 def clear_vms():
-    '''
-    hollow function that will clear out VM folders where tests were successful
-    '''
+    """
+    hollow function that will clear out VM folders
+    """
+
     return
 
 
@@ -111,19 +121,20 @@ def clear_vms():
               default='settings.yaml',
               help='The name of your config file, supports YAML and JSON')
 def command_line(config):
-    """
-    search for and open our config file.
-    accepts json or yaml
-    """
+    """ main thread """
     print('''WARNING: This kind of unit testing should only be on beefy machines,
      otherwise vagrant may eat your shorts...''')
-    if os.path.isfile(config):
-        config = yaml.load(open(config))
-        if config['debug']:
-            print('WARNING: Debugging enabled, no virtual machines will be created')
-            global debug
-            debug = True
-        generate_vagrantfiles(config)
+     # open config file
+    config = open_config(config)
+    if not config:
+        print("config file doesn't exist?")
+    # create vagrant files
+    vm_list = generate_machines(config)
+    # Now spin clusters
+    spin_clusters(vm_list)
+
+    clear_vms()
+
 
 
 # start CLI input function using click module
