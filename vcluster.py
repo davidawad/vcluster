@@ -6,6 +6,7 @@
 
 from jinja2 import Environment, FileSystemLoader
 from virtual_machine import vm
+from threading import Thread
 import subprocess
 import click
 import json
@@ -22,9 +23,7 @@ def open_config(config_path):
     """
     search for and open our config file.
     accepts json or yaml
-    returns config on success
-
-    returns false otherwise
+    returns config on success, false otherwise
     """
     if not os.path.isfile(config_path):
         print('No ' + str(config_path) + ' found')
@@ -40,7 +39,7 @@ def open_config(config_path):
             config = json.load(json_data)
             return config
     else:
-        print('invalid filetype, YAML or JSON')
+        # print('invalid filetype, YAML or JSON')
         return False
 
 
@@ -104,12 +103,22 @@ def spin_clusters(vm_list):
     Iterates through list of vm objects and performs a vagrant up in a
     subprocess and captures output if it exists
     """
-    for vm in vm_list:
-        vm.boot()
-        # TODO multiprocess these and compile output objects after the fact
-        if vm.stderr:
-            print('Virtual Machine {0} logged to stder:'.format(vm.os))
-            print_stderr(vm.stderr)
+    threads = [(Thread(target=bootvm, args=(vm,)), vm) for vm in vm_list]
+    for item in threads:
+        item[0].start()
+    # TODO multiprocess these and compile output objects after the fact
+    for item in threads:
+        item[0].join()
+        if item[1].stderr:
+            print('Virtual Machine {0} logged to stderr:'.format(item[1].os))
+            print_stderr(item[1].stderr)
+
+
+def bootvm(vm):
+    """
+    takes in a vm object and boots it up
+    """
+    vm.boot()
 
 
 def clear_vms():
@@ -130,8 +139,8 @@ def clear_vms():
               default='settings.yaml',
               help='The name of your config file, supports YAML and JSON')
 def command_line(config_path):
-    print_stderr('''WARNING: This kind of unit testing should only be on
-    beefy machines, otherwise vagrant may eat your shorts...''')
+    print_stderr('''WARNING: This kind of unit testing should only be on beefy
+    machines, otherwise vagrant may eat your shorts...''')
     # open config file
     config = open_config(config_path)
     if not config:
@@ -149,6 +158,5 @@ def command_line(config_path):
     clear_vms()
 
 
-# start CLI input function using click module
 if __name__ == "__main__":
     configs = command_line()
