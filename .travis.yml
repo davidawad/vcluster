@@ -12,7 +12,7 @@ install:
 
 # command to run tests
 script:
-  - python unittest.py
+  - python test_cluster.py
 
 notifications:
   email:
