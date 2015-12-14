@@ -9,7 +9,6 @@ You can of course edit the `Vagrantfile` any way you see fit in order to make pr
 ## Requirements
 - VirtualBox
 - Vagrant
-- Puppet
 - Python 2.7+
 
 ## How it works
