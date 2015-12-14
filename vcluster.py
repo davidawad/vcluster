@@ -8,6 +8,7 @@ from jinja2 import Environment, FileSystemLoader
 from virtual_machine import vm
 from threading import Thread
 import subprocess
+import shutil
 import click
 import json
 import yaml
