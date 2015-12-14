@@ -6,6 +6,7 @@
 #
 
 import subprocess
+import psutil
 
 
 class vm(object):
@@ -32,4 +33,7 @@ class vm(object):
             # TODO get stderr
             stdout = proc.communicate()[0]
 
+            # TODO test on a fast machine
+            p = psutil.Process(proc.pid)
+            print(p.get_cpu_times())
         return
