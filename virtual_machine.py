@@ -22,7 +22,7 @@ class vm(object):
 
     def boot(self):  # FIXME move this around a bit?
         if self.debug:
-            print("DEBUG: Vagrant up")
+            print("DEBUG: Vagrant up on: " + self.os)
             return
         else:
             proc = subprocess.Popen(['vagrant', 'up'],
