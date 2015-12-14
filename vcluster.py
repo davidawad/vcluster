@@ -22,6 +22,9 @@ def open_config(config_path):
     """
     search for and open our config file.
     accepts json or yaml
+    returns config on success
+
+    returns false otherwise
     """
     if not os.path.isfile(config_path):
         print('No ' + str(config_path) + ' found')
@@ -47,7 +50,7 @@ def print_stderr(out):
 
 def render_template(template_arg, **kwargs):
     """
-    This function just uses kwargs to render the vagrantfile template
+    uses kwargs to render vagrantfile template
     using the jinja2 templating engine similar to flask usage
     """
     return env.get_template(template_arg).render(kwargs)
@@ -98,14 +101,12 @@ def generate_machines(config):
 
 def spin_clusters(vm_list):
     """
-    input: Takes in a list of vm Objects
-    output: returns
-
-    Iterates through a list of vm objects and performs a vagrant up in a
+    Iterates through list of vm objects and performs a vagrant up in a
     subprocess and captures output if it exists
     """
     for vm in vm_list:
         vm.boot()
+        # TODO multiprocess these and compile output objects after the fact
         if vm.stderr:
             print('Virtual Machine {0} logged to stder:'.format(vm.os))
             print_stderr(vm.stderr)
@@ -114,9 +115,14 @@ def spin_clusters(vm_list):
 def clear_vms():
     """
     clear out VM folders
+    return false if we can't
     """
-    proc = subprocess.Popen(['rm', '-rf', 'temp_cluster'])
-    return
+    try:
+        proc = subprocess.Popen(['rm', '-rf', 'temp_cluster'])
+    except Exception as e:
+        print(e)
+        return False
+    return True
 
 
 @click.command()
