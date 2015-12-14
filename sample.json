@@ -1,0 +1,22 @@
+{
+    "systems": ["hashicorp/precise32",
+              "ubuntu/trusty64",
+              "puphpet/centos65-x64"
+          ],
+
+
+    "command" : "python unittest.py",
+
+
+    "puppet" : "init.pp",
+
+    "digital_ocean": {
+        "id_rsa": "id_rsa",
+        "image" : "ubuntu-14-04-x64" },
+
+    "linode" : {
+        "id_rsa" : "id_rsa",
+        "distro" : "Ubuntu 14.04 LTS" } ,
+
+    "debug" : "true"
+}
