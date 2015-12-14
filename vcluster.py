@@ -7,7 +7,6 @@
 from jinja2 import Environment, FileSystemLoader
 from virtual_machine import vm
 import subprocess
-import shutil
 import click
 import json
 import yaml
@@ -24,15 +23,21 @@ def open_config(config_path):
     search for and open our config file.
     accepts json or yaml
     """
-    if os.path.isfile(config_path):
-        config = yaml.load(open(config_path))
-        if config['debug']:
-            print_stderr('Debug enabled, no virtual machines will be created')
-            global debug
-            debug = True
-        return config
-    else:
+    if not os.path.isfile(config_path):
         print('No ' + str(config_path) + ' found')
+        return False
+
+    filename, file_extension = os.path.splitext(config_path)
+
+    if file_extension in {'.yml', '.yaml', '.YML', '.YAML'}:
+        config = yaml.load(open(config_path))
+        return config
+    elif file_extension is '.json':
+        with open('strings.json') as json_data:
+            config = json.load(json_data)
+            return config
+    else:
+        print('invalid filetype, YAML or JSON')
         return False
 
 
@@ -43,11 +48,9 @@ def print_stderr(out):
 def render_template(template_arg, **kwargs):
     """
     This function just uses kwargs to render the vagrantfile template
-    using the jinja2 templating engine a la flask usage
+    using the jinja2 templating engine similar to flask usage
     """
-    template = env.get_template(template_arg)
-    output_from_parsed_template = template.render(kwargs)
-    return output_from_parsed_template
+    return env.get_template(template_arg).render(kwargs)
 
 
 def get_filepaths(directory):
@@ -121,13 +124,17 @@ def clear_vms():
               default='settings.yaml',
               help='The name of your config file, supports YAML and JSON')
 def command_line(config_path):
-    """ main thread """
     print_stderr('''WARNING: This kind of unit testing should only be on
     beefy machines, otherwise vagrant may eat your shorts...''')
     # open config file
     config = open_config(config_path)
     if not config:
         print("config file doesn't exist?")
+
+    if config['debug']:
+        print_stderr('Debug enabled, no virtual machines will be created')
+        global debug
+        debug = True
     # create vagrant files
     vm_list = generate_machines(config)
     # Now spin clusters
