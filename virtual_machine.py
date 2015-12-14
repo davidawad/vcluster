@@ -31,4 +31,5 @@ class vm(object):
                                     stderr=subprocess.STDOUT)
             # TODO get stderr
             stdout = proc.communicate()[0]
+
         return

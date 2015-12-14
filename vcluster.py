@@ -107,7 +107,7 @@ def spin_clusters(vm_list):
     threads = [(Thread(target=bootvm, args=(vm,)), vm) for vm in vm_list]
     for item in threads:
         item[0].start()
-    # TODO multiprocess these and compile output objects after the fact
+
     for item in threads:
         item[0].join()
         if item[1].stderr:
@@ -116,9 +116,6 @@ def spin_clusters(vm_list):
 
 
 def bootvm(vm):
-    """
-    takes in a vm object and boots it up
-    """
     vm.boot()
 
 
