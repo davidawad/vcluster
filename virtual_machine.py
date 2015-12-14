@@ -20,6 +20,7 @@ class vm(object):
         self.debug = debug
         self.stdout = None
         self.stderr = None
+        self.cputime = 0.00
 
     def boot(self):  # FIXME move this around a bit?
         if self.debug:
