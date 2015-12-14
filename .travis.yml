@@ -12,6 +12,9 @@ install:
 # command to run tests
 script:
   - python test_cluster.py
+  - pip install coveralls
+
+  - coverage run test_cluster.py
 
 notifications:
   email:
