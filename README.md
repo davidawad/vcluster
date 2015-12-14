@@ -1,4 +1,4 @@
-# vcluster [![Code Climate](https://codeclimate.com/github/DavidAwad/vcluster/badges/gpa.svg)](https://codeclimate.com/github/DavidAwad/vcluster)
+# vcluster [![Build Status](https://travis-ci.org/DavidAwad/vcluster.svg?branch=master)](https://travis-ci.org/DavidAwad/vcluster) [![Code Climate](https://codeclimate.com/github/DavidAwad/vcluster/badges/gpa.svg)](https://codeclimate.com/github/DavidAwad/vcluster)
 
 a CLI for generating Vagrant files and running cross platform clustered unit tests from the command line.
 
