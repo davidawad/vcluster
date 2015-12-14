@@ -130,7 +130,6 @@ def clear_vms():
     try:
         shutil.rmtree('temp_cluster')
     except Exception as e:
-        print(e)
         return False
     return True
 
