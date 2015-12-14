@@ -19,20 +19,20 @@ env = Environment(loader=FileSystemLoader('templates'))
 debug = False
 
 
-def open_config(config):
+def open_config(config_path):
     """
     search for and open our config file.
     accepts json or yaml
     """
-    if os.path.isfile(config):
-        config = yaml.load(open(config))
+    if os.path.isfile(config_path):
+        config = yaml.load(open(config_path))
         if config['debug']:
             print_stderr('Debug enabled, no virtual machines will be created')
             global debug
             debug = True
         return config
     else:
-        print('No settings.yaml found')
+        print('No ' + str(config_path) + ' found')
         return False
 
 
@@ -117,15 +117,15 @@ def clear_vms():
 
 
 @click.command()
-@click.option('--config',
+@click.option('--config_path',
               default='settings.yaml',
               help='The name of your config file, supports YAML and JSON')
-def command_line(config):
+def command_line(config_path):
     """ main thread """
     print_stderr('''WARNING: This kind of unit testing should only be on
     beefy machines, otherwise vagrant may eat your shorts...''')
     # open config file
-    config = open_config(config)
+    config = open_config(config_path)
     if not config:
         print("config file doesn't exist?")
     # create vagrant files
