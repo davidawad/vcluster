@@ -127,7 +127,7 @@ def clear_vms():
     return false if we can't
     """
     try:
-        proc = subprocess.Popen(['rm', '-rf', 'temp_cluster'])
+        shutil.rmtree('temp_cluster')
     except Exception as e:
         print(e)
         return False
