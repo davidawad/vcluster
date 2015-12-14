@@ -14,7 +14,6 @@ import yaml
 import os
 
 
-
 env = Environment(loader=FileSystemLoader('templates'))
 
 debug = False
@@ -28,7 +27,7 @@ def open_config(config):
     if os.path.isfile(config):
         config = yaml.load(open(config))
         if config['debug']:
-            print_stderr('Debugging enabled, no virtual machines will be created')
+            print_stderr('Debug enabled, no virtual machines will be created')
             global debug
             debug = True
         return config
@@ -38,7 +37,7 @@ def open_config(config):
 
 
 def print_stderr(out):
-    print ("\033[91m {}\033[00m".format(out))
+    print ("\033[91m{}\033[00m".format(out))
 
 
 def render_template(template_arg, **kwargs):
@@ -105,7 +104,7 @@ def spin_clusters(vm_list):
     for vm in vm_list:
         vm.boot()
         if vm.stderr:
-            print('Virtual Machine {0} logged to stder:', vm.os)
+            print('Virtual Machine {0} logged to stder:'.format(vm.os))
             print_stderr(vm.stderr)
 
 
@@ -123,8 +122,8 @@ def clear_vms():
               help='The name of your config file, supports YAML and JSON')
 def command_line(config):
     """ main thread """
-    print_stderr('''WARNING: This kind of unit testing should only be on beefy machines,
-     otherwise vagrant may eat your shorts...''')
+    print_stderr('''WARNING: This kind of unit testing should only be on
+    beefy machines, otherwise vagrant may eat your shorts...''')
     # open config file
     config = open_config(config)
     if not config:
@@ -133,8 +132,8 @@ def command_line(config):
     vm_list = generate_machines(config)
     # Now spin clusters
     spin_clusters(vm_list)
-
-    # clear_vms()
+    # clear the folder
+    clear_vms()
 
 
 # start CLI input function using click module
