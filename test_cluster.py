@@ -59,8 +59,11 @@ class vclusterTests(unittest.TestCase):
 
     def tearDown(self):
         vcluster.clear_vms()
-        os.remove('settings.csv')
-        return
+        try:
+            os.remove('settings.csv')
+        except OSError:
+            pass
+
 
 if __name__ == '__main__':
     unittest.main()
