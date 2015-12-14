@@ -1,6 +1,9 @@
 language: python
+
 python:
+  - 2.6
   - 2.7
+  - 3.3
   - 3.4
 
 # command to install dependencies
@@ -9,10 +12,11 @@ install:
 
 # command to run tests
 script:
-  - python tests/unittest.py
+  - python unittest.py
 
 notifications:
   email:
     - contact@davidawad.com
 
-after_success: coveralls --verbose
+after_success:
+    - coveralls
