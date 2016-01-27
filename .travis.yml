@@ -22,3 +22,6 @@ notifications:
 
 after_success:
     - coveralls
+
+notifications:
+  slack: davidawad:noEbqmA76c85Nxmh49uDyyQJ
