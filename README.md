@@ -1,10 +1,12 @@
 # vcluster [![Build Status](https://travis-ci.org/DavidAwad/vcluster.svg?branch=master)](https://travis-ci.org/DavidAwad/vcluster) [![Coverage Status](https://coveralls.io/repos/DavidAwad/vcluster/badge.svg?branch=master&service=github)](https://coveralls.io/github/DavidAwad/vcluster?branch=master) [![Code Climate](https://codeclimate.com/github/DavidAwad/vcluster/badges/gpa.svg)](https://codeclimate.com/github/DavidAwad/vcluster) 
 
-a CLI for generating Vagrant files and running cross platform clustered unit tests from the command line.
+![](http://i.imgur.com/um4kNDn.png)
+
+A CLI for generating Vagrant files and running cross platform clustered unit tests from the command line.
 
 You need to use something like Puppet as a provisioning service in order to make sure when you boot your other virtual machines that they are configured properly.
 
-You can of course edit the `Vagrantfile` any way you see fit in order to make provisioning happen correctly. I've included a basic sample.  
+You can of course edit the `Vagrantfile` any way you see fit in order to make provisioning happen correctly. I've included a basic sample. 
 
 ## Requirements
 - VirtualBox
